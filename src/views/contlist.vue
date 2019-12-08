@@ -42,19 +42,19 @@
                 >
                 </el-table-column>
                 <el-table-column
-                        prop="content"
-                        label="用户名"
+                        prop="messagesInfo"
+                        label="动态内容"
                         align="center"
                         width="auto">
                 </el-table-column>
                 <el-table-column
-                        prop="name"
+                        prop="users.userNikename"
                         label="用户名"
                         align="center"
                         width="100px">
                 </el-table-column>
                 <el-table-column
-                        prop="type"
+                        prop="messagesType"
                         label="类别"
                         sortable
                         align="center"
@@ -62,21 +62,32 @@
                 </el-table-column>
 
                 <el-table-column
-                        prop="data"
+                        prop="messagesTime"
                         label="发表时间"
                         sortable
                         align="center"
                         width="200px">
                 </el-table-column>
                 <el-table-column
-                        prop="like"
+                        prop="messagesAgreenum"
                         label="点赞数"
                         align="center"
                         width="80px">
                 </el-table-column>
-
                 <el-table-column
-                        prop="counter"
+                        prop="messagesCollectnum"
+                        label="收藏数"
+                        align="center"
+                        width="80px">
+                </el-table-column>
+                <el-table-column
+                        prop="messagesTranspondnum"
+                        label="转发数"
+                        align="center"
+                        width="80px">
+                </el-table-column>
+                <el-table-column
+                        prop="messagesReadnum"
                         label="浏览量"
                         align="center"
                         width="80px">
@@ -164,49 +175,22 @@
         },
         methods:{
             getProfile(){
-
-                this.allTableData=[
-                    {data:'2019-08-22',name:'wf',wid:1,like:26,counter:2544,showstatus:'待审',content:'麻烦分享一下近期开心事儿 '},
-                    {data:'2019-09-21',name:'wf',wid:4,like:26,counter:24,showstatus:'待审',content:'哈哈哈哈'},
-                    {data:'2019-08-25',name:'wf',wid:53,like:26,counter:31,type:'学习',showstatus:'待审',content:'看起来好简单，学起来深似海'},
-                    {data:'2019-09-23',name:'wf',wid:246,like:26,counter:345,showstatus:'待审',content:'麻烦分享一下近期开心事儿 '},
-                    {data:'2019-09-04',name:'hh',wid:2544,like:26,counter:452,type:'漫画',showstatus:'待审',content:'DC超级英雄主题特展登陆#BW2019# 上海站啦~ 记得到时候来N1馆展位感受超级英雄们的抛瓦[喵喵] '},
-                    {data:'2019-09-12',name:'wf',wid:23,like:26,counter:411,showstatus:'待审',content:'麻烦分享一下近期开心事儿 '},
-                    {data:'2019-09-22',name:'wf',wid:65,like:26,counter:1000,type:'环保',showstatus:'待审',content:'2012年以来，中国每年完成营造林近7万平方公里，治理沙化土地3万多平方公里。2000年至2017年，全球新增绿化面积有四分之一来自中国' +
-                            '2012年以来，中国每年完成营造林近7万平方公里，治理沙化土地3万多平方公里。2000年至2017年，全球新增绿化面积有四分之一来自中国' +
-                            '2012年以来，中国每年完成营造林近7万平方公里，治理沙化土地3万多平方公里。2000年至2017年，全球新增绿化面积有四分之一来自中国' +
-                            '2012年以来，中国每年完成营造林近7万平方公里，治理沙化土地3万多平方公里。2000年至2017年，全球新增绿化面积有四分之一来自中国。'},
-                    {data:'2019-09-15',name:'wf',wid:35,like:26,counter:54,showstatus:'待审',content:'我们的一些希望和一个决定'},
-                    {data:'2019-09-09',name:'ff',wid:695,like:26,counter:4,showstatus:'待审',content:'剧透完了'},
-                    {data:'2019-09-22',name:'wf',wid:5,like:26,counter:56,showstatus:'待审',content:'。。。。。'},
-                ]
-
-
-
-                // this.allTableData=[{data:'2019-09-22',name:'wf',id:1,money:100,sex:'男'},
-                //     {data:'2019-09-26',name:'aa',id:7,money:700,sex:'男'}]
-                // console.log(this.allTableData)
-                //
-                // // 获取表格数据
-                // this.$axios
-                //     .get("/api/api/test")
-                //     .then(res =>{
-                //         console.log(res);
-                //         this.allTableData = res.data;
-                //         console.log('--------------------')
-                //         console.log(this.allTableData)
-                //         this.setPaginations()
-                //         })
-                //     .catch(err => console.log(err))
-                this.datas = this.allTableData
-                this.setPaginations()
-
+                this.$axios
+                    .get("/api/message/getAllMessage?value=1")
+                    .then(res =>{
+                        // console.log(res);
+                        this.allTableData = res.data;
+                        // console.log('--------------------')
+                        // console.log(this.allTableData)
+                        this.setPaginations()
+                        })
+                    .catch(err => console.log(err))
             },
             setPaginations(){
                 //设置分页属性
                 this.paginations.total = this.allTableData.length;
                 this.paginations.page_index = 1;
-                this.paginations.page_size = 10;
+                this.paginations.page_size = 5;
                 //设置默认分页数据
                 this.tableData = this.allTableData.filter((item,index) => {
                     return index < this.paginations.page_size
