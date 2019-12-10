@@ -82,8 +82,13 @@
                 </el-table-column>
 
 
-                <el-table-column label="操作" align="center" prop="operation" width="160px">
+                <el-table-column label="操作" align="center" prop="operation" width="250px">
                     <template slot-scope="scope">
+                        <el-button
+                                size="small"
+                                type="success"
+                                icon="delete"
+                                @click="handleAdd(scope.$index, scope.row)">查看</el-button>
                         <el-button
                                 type="primary"
                                 size="small"
@@ -94,6 +99,7 @@
                                 type="danger"
                                 icon="delete"
                                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+
                     </template>
                 </el-table-column>
             </el-table>
@@ -166,8 +172,10 @@
                     .then(res =>{
                         // console.log(res);
                         this.allTableData = res.data;
+                        this.datas = this.allTableData;
                         // console.log('--------------------')
                         // console.log(this.allTableData)
+                        // console.log(this.datas);
                         this.setPaginations()
                     })
                     .catch(err => console.log(err))
@@ -192,6 +200,7 @@
                             type:'success'
                         })
                         this.allTableData = res.data;
+                        this.datas = this.allTableData
                     })
                     .catch()
                 this.filterTableData = this.allTableData
@@ -210,6 +219,7 @@
                             message:'删除成功',
                             type:'success'
                         })
+                        this.datas = this.allTableData
                         this.allTableData = res.data;
                     })
                     .catch()
@@ -231,11 +241,12 @@
                     return;
                 }
                 this.filterTableData = this.datas
-                console.log(this.filterTableData)
+                // this.filterTableData = this.tableData
+                // console.log(this.datas)
                 const stime = this.search_data.startTime.getTime();
                 const etime = this.search_data.endTime.getTime();
                 this.allTableData = this.filterTableData.filter(item => {
-                    let date = new Date(item.data);
+                    let date = new Date(item.messagesTime);
                     let time = date.getTime();
                     return time >= stime && time <= etime;
                     // console.log(item)
@@ -248,17 +259,19 @@
                 this.allTableData = this.datas
                 this.setPaginations()
             },
-            handleAdd(){
+            //显示文章内容
+            handleAdd(index,row){
                 // console.log("aaa")
                 this.dialog={
                     show:true,
                     title:'添加',
                     option:"add"
-                }
+                };
                 this.formData = {
-                    money : '',
-                    name:'',
-                    sex:''
+                    info : row.messagesInfo,
+                    username:row.users.userNikename,
+                    time:row.messagesTime,
+                    id:"文章ID："+row.messagesId
                 }
             },
             handleSizeChange(page_size){

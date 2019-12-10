@@ -24,13 +24,13 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="userNikename"
                     label="用户名"
                     align="center"
                     width="100px">
             </el-table-column>
             <el-table-column
-                    prop="id"
+                    prop="userId"
                     label="ID"
                     sortable
                     align="center"
@@ -38,7 +38,7 @@
             </el-table-column>
 
             <el-table-column
-                    prop="data"
+                    prop="userTime"
                     label="注册时间"
                     sortable
                     align="center"
@@ -46,13 +46,13 @@
             </el-table-column>
 
             <el-table-column
-                    prop="email"
+                    prop="userEmail"
                     label="邮箱"
                     align="center"
                     width="auto">
             </el-table-column>
             <el-table-column
-                    prop="sex"
+                    prop="userSex"
                     label="性别"
                     align="center"
                     width="80px">
@@ -64,29 +64,30 @@
                     width="100px">
             </el-table-column>
             <el-table-column
-                    prop="counter"
+                    prop="userBirthday"
+                    label="生日"
+                    align="center"
+                    width="auto">
+            </el-table-column>
+            <el-table-column
+                    prop="userCount"
                     label="登录次数"
                     align="center"
                     width="100">
             </el-table-column>
             <el-table-column
-                    prop="conts"
+                    prop="messages"
                     label="发表文章数"
                     align="center"
                     width="100px">
             </el-table-column>
             <el-table-column
-                    prop="status"
+                    prop="userStatusStr"
                     label="状态"
                     align="center"
                     width="70px">
             </el-table-column>
-            <el-table-column
-                    prop="lastdata"
-                    label="最后登录时间"
-                    align="center"
-                    width="auto">
-            </el-table-column>
+
             <el-table-column label="操作" align="center" prop="operation" width="160px">
                 <template slot-scope="scope">
                     <el-button
@@ -157,34 +158,19 @@
          },
         methods:{
             getProfile(){
-                // console.log("ttttttt")
-                this.allTableData=[
-                    {data:'2019-09-22',name:'wf',id:1,money:100,sex:'男',conts:8},
-                    {data:'2019-09-23',name:'hh',id:2,email:'123@321.com',sex:'男',conts:48,role:"管理员",counter:8,status:'正常',lastdata:"2019-07-19 10:51:30"},
-                    {data:'2019-09-25',name:'ff',id:3,email:'123@321.com',sex:'女',conts:12,role:"用户",counter:8,status:'正常',lastdata:"2019-07-19 10:51:30"},
-                    {data:'2019-09-28',name:'hh',id:4,email:'123@321.com',sex:'男',conts:8,role:"管理员",counter:8,status:'正常',lastdata:"2019-07-19 10:51:30"},
-                    {data:'2019-09-23',name:'ferge',id:5,email:'123@321.com',sex:'男',conts:60,role:"管理员",counter:8,status:'异常',lastdata:"2019-07-19 10:51:30"},
-                    {data:'2019-09-11',name:'dfhyrsv',id:6,email:'123@321.com',sex:'男',conts:0,role:"管理员",counter:8,status:'正常',lastdata:"2019-07-19 10:51:30"},
-                    {data:'2019-09-26',name:'aa',id:7,money:700,sex:'男'}
-                ]
 
-                // this.allTableData=[{data:'2019-09-22',name:'wf',id:1,money:100,sex:'男'},
-                //     {data:'2019-09-26',name:'aa',id:7,money:700,sex:'男'}]
-                // console.log(this.allTableData)
-                //
-                // // 获取表格数据
-                // this.$axios
-                //     .get("/api/api/test")
-                //     .then(res =>{
-                //         console.log(res);
-                //         this.allTableData = res.data;
-                //         console.log('--------------------')
-                //         console.log(this.allTableData)
-                //         this.setPaginations()
-                //         })
-                //     .catch(err => console.log(err))
-                this.datas = this.allTableData
-                this.setPaginations()
+                // 获取表格数据
+                this.$axios
+                    .get("/api/user/getAllUser")
+                    .then(res =>{
+                        console.log(res);
+                        this.allTableData = res.data;
+                        console.log('--------------------')
+                        console.log(this.allTableData)
+                        this.setPaginations()
+                        })
+                    .catch(err => console.log(err))
+
 
             },
             setPaginations(){
