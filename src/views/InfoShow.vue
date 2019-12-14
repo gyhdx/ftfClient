@@ -18,34 +18,26 @@
                     <div class="user-item">
                         昵称：
                         <!--{{}}中可以直接使用js代码-->
-                        <span>{{user.name}}</span>
+                        <span>{{user.userNikename}}</span>
                     </div>
                     <div class="user-item">
                         性别：
-                        <span>{{user.sex}}</span>
+                        <span>{{user.userSex}}</span>
                     </div>
                     <div class="user-item">
                         角色：
-                        <span>{{user.role}}</span>
+                        <span>{{user.role.roleName}}</span>
                     </div>
                     <div class="user-item">
                         生日：
-                        <span>{{user.borthday}}</span>
+                        <span>{{user.userBirthday}}</span>
                     </div>
                     <div class="user-item">
                         邮箱：
-                        <span>{{user.email}}</span>
+                        <span>{{user.userEmail}}</span>
                     </div>
-                    <div class="user-item">
-                        简介：
-                        <span>{{user.descript}}</span>
 
-                    </div>
-                    <el-row class="user-item">
 
-                        <el-button type="primary" icon="view" @click="handleChange()">修改资料</el-button>
-
-                    </el-row>
                 </div>
 
 
@@ -63,20 +55,13 @@
     export default {
 
         name: "InfoShow",
-        // computed:{
-        //     user(){
-        //         return this.$store.getters.user;
-        //     }
-        // },
         data(){
             return{
                 user:{},
                 infolog:{
                     show:false,
                 },
-                formData:{
-                    name:'',role:'',email:"",sex:'',descript:'',borthday:''
-                },
+                formData:{},
                 centerDialogVisible:true
             }
         },
@@ -85,13 +70,12 @@
         },
         methods:{
             getProfile(){
-                this.user = {name:'wf',role:'管理员',email:"123@123.com",sex:'男',descript:'我是管理员',borthday:'1999-07-18'}
-            },
-            handleChange(){
-                // console.log(this.dialog)
-                this.infolog.show=true
-                this.formData=this.user
-                console.log(this.formData)
+                this.$axios
+                    .get("/api/user/getUserInfo")
+                    .then(res =>{
+                        this.user = res.data;
+                    })
+                    .catch(err => console.log(err))
             }
         },
         components:{

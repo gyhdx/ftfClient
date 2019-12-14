@@ -7,18 +7,6 @@
 
         <div>
             <el-form :inline="true" ref="search_data" :model="search_data">
-                <!-- 删选 -->
-                <el-form-item label="按时间筛选:">
-                    <el-date-picker v-model="search_data.startTime" type="date" placeholder="选择开始时间"></el-date-picker>--
-                    <el-date-picker v-model="search_data.endTime" type="date" placeholder="选择结束时间"></el-date-picker>
-                </el-form-item>
-
-                <el-form-item>
-                    <el-button type="primary" size="small" icon="search" @click="handleSearch">筛选</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="info" size="small" icon="search" @click="clearSearch">恢复</el-button>
-                </el-form-item>
                 <el-form-item class="btnRight">
                     <el-button type="danger"  icon="view" @click="handleAdd">返回</el-button>
                 </el-form-item>
@@ -39,55 +27,49 @@
                         width="50"
                 ></el-table-column>
                 <el-table-column
-                        prop="pid"
+                        prop="commentsId"
                         label="评论ID"
                         align="center"
                         width="100">
                 </el-table-column>
                 <el-table-column
-                        prop="review"
+                        prop="commentsInfo"
                         label="评论内容"
                         align="center"
                         width="auto">
                 </el-table-column>
                 <el-table-column
-                        prop="name"
+                        prop="userChild.userNikename"
                         label="评论人"
                         align="center"
-                        width="120">
+                        width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="replay"
-                        label="回复"
+                        prop="userParent.userNikename"
+                        label="被评论人"
                         align="center"
-                        width="auto">
-                </el-table-column>
-                <el-table-column
-                        prop="name1"
-                        label="回复人"
-                        align="center"
-                        width="120">
+                        width="150">
                 </el-table-column>
 
 
                 <el-table-column
-                        prop="date"
+                        prop="commentsTime"
                         label="日期"
                         align="center"
                         width="200">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.commentsTime }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" prop="operation" width="160px">
                     <template slot-scope="scope">
 
                         <el-button
-                        size="small"
-                        type="danger"
-                        icon="delete"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                size="small"
+                                type="danger"
+                                icon="delete"
+                                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -142,52 +124,19 @@
         },
         methods:{
             getProfile(){
-
-                this.allTableData=[{
-                    date: '2019-05-02',
-                    name: '王小虎',
-                    review:'还好我没有点开看！',
-                    pid:1,
-                    replay:"hhhhh",
-                    name1:'gx'
-                }, {
-                    date: '2019-05-02',
-                    name: '王小虎',
-                    review:'导演啥时候出新作啊',
-                    pid:2,
-                    replay:"马上",
-                    name1:'ll'
-                }, {
-                    date: '2019-05-02',
-                    name: '王小虎',
-                    review:'hhhhhhhh',
-                    pid:3,
-
-                }, {
-                    date: '2019-05-02',
-                    name: '王小虎',
-                    review:'马上分公司',
-                    pid:4
-                }]
-
-
-                // this.allTableData=[{data:'2019-09-22',name:'wf',id:1,money:100,sex:'男'},
-                //     {data:'2019-09-26',name:'aa',id:7,money:700,sex:'男'}]
-                // console.log(this.allTableData)
-                //
-                // // 获取表格数据
-                // this.$axios
-                //     .get("/api/api/test")
-                //     .then(res =>{
-                //         console.log(res);
-                //         this.allTableData = res.data;
-                //         console.log('--------------------')
-                //         console.log(this.allTableData)
-                //         this.setPaginations()
-                //         })
-                //     .catch(err => console.log(err))
-                this.datas = this.allTableData
-                this.setPaginations()
+                var id = this.$route.params.key
+                // console.log(id)
+                // 获取表格数据
+                this.$axios
+                    .get("/api/comment/getById?id="+id)
+                    .then(res =>{
+                        console.log(res);
+                        this.allTableData = res.data;
+                        console.log('--------------------')
+                        console.log(this.allTableData)
+                        this.setPaginations()
+                    })
+                    .catch(err => console.log(err))
 
             },
             setPaginations(){
@@ -217,22 +166,21 @@
 
             },
             handleDelete(index,row){
-                // console.log("ddd")
-                // this.$axios.delete('')
+                // console.log(row.messagesId)
+                // this.$axios.get("/api/message/updateMessageState?id="+row.messagesId+"&state=3")
                 //     .then(res =>{
-                //         this.$message("删除成功")
-                //         this.getPrfile()
+                //         this.$message({
+                //             message:'删除成功',
+                //             type:'success'
+                //         })
+                //         this.datas = this.allTableData
+                //         this.allTableData = res.data;
                 //     })
                 //     .catch()
                 this.filterTableData = this.allTableData
 
                 this.allTableData = this.filterTableData.filter(item =>{
-                    // console.log(item)
-                    return item.pid != row.pid
-                })
-                this.$message({
-                    message:'删除成功',
-                    type:'success'
+                    return item.commentsId != row.commentsId
                 })
                 this.setPaginations()
             },

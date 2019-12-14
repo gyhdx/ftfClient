@@ -61,7 +61,7 @@
                     {
                         icon: ' el-icon-user',
                         name: '个人信息',
-                        path: 'infoshow'
+                        path: 'infoshow',
                     }
                 ]
             }

@@ -43,34 +43,44 @@
                         width="auto">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.loggerTime }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="name"
+                        prop="users.userNikename"
                         label="用户名"
                         align="center"
                         width="auto">
                 </el-table-column>
                 <el-table-column
-                        prop="role"
+                        prop="users.role.roleName"
                         label="角色"
                         align="center"
                         width="auto">
                 </el-table-column>
                 <el-table-column
-                        prop="ip"
-                        label="IP"
-                        align="center"
-                        width="auto">
-                </el-table-column>
-                <el-table-column
-                        prop="operate"
+                        prop="loggerDo"
                         label="操作"
                         align="center"
                         width="auto">
                 </el-table-column>
             </el-table>
+            <!--分页-->
+            <el-row>
+                <el-col :span="24">
+                    <div class="pagination">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sycn="paginations.page_index"
+                                :page-sizes="paginations.page_sizes"
+                                :page-size="paginations.page_size"
+                                :layout="paginations.layout"
+                                :total="paginations.total">
+                        </el-pagination>
+                    </div>
+                </el-col>
+            </el-row>
         </template>
 
     </div>
@@ -123,51 +133,22 @@
         methods:{
             getProfile(){
 
-                this.allTableData=[{
-                    date: '2019-05-02',
-                    name: '王小虎',
-                    ip: '117.32.156.23',
-                    role:"管理员",
-                    operate:'登录系统'
-
-                }, {
-                    date: '2019-09-02',
-                    name: '哈哈',
-                    ip: '117.33.156.23',
-                    role:"普通用户",
-                    operate:'查看文章，id为：15'
-                }, {
-                    date: '2019-09-12',
-                    name: '函数',
-                    ip: '192.32.156.23',
-                    role:"普通用户",
-                    operate:'查看文章，id为：32'
-                }, {
-                    date: '2019-09-12',
-                    name: 'wf',
-                    ip: '192.168.0.1',
-                    role:"普通用户",
-                    operate:'查看文章，id为：1'
-                }]
-
-
                 // this.allTableData=[{data:'2019-09-22',name:'wf',id:1,money:100,sex:'男'},
                 //     {data:'2019-09-26',name:'aa',id:7,money:700,sex:'男'}]
                 // console.log(this.allTableData)
                 //
                 // // 获取表格数据
-                // this.$axios
-                //     .get("/api/api/test")
-                //     .then(res =>{
-                //         console.log(res);
-                //         this.allTableData = res.data;
-                //         console.log('--------------------')
-                //         console.log(this.allTableData)
-                //         this.setPaginations()
-                //         })
-                //     .catch(err => console.log(err))
-                this.datas = this.allTableData
-                this.setPaginations()
+                this.$axios
+                    .get("/api/util/gatAllLog")
+                    .then(res =>{
+                        console.log(res);
+                        this.allTableData = res.data;
+                        this.datas = this.allTableData;
+                        this.setPaginations()
+                        })
+                    .catch(err => console.log(err))
+                // this.datas = this.allTableData
+                // this.setPaginations()
 
             },
             setPaginations(){
@@ -256,7 +237,7 @@
                 const stime = this.search_data.startTime.getTime();
                 const etime = this.search_data.endTime.getTime();
                 this.allTableData = this.filterTableData.filter(item => {
-                    let date = new Date(item.data);
+                    let date = new Date(item.loggerTime);
                     let time = date.getTime();
                     return time >= stime && time <= etime;
                     // console.log(item)

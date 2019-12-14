@@ -18,6 +18,14 @@
                 <el-form-item>
                     <el-button type="info" size="small" icon="search" @click="clearSearch">恢复</el-button>
                 </el-form-item>
+                <div style="float: right;">
+                <el-form-item label="根据用户名查询">
+                    <el-input v-model="search_data.user" placeholder="用户名"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="searchByname">查询</el-button>
+                </el-form-item></div>
             </el-form>
         </div>
         <div class="table_container">
@@ -143,7 +151,8 @@
             return{
                 search_data: {
                     startTime: "",
-                    endTime: ""
+                    endTime: "",
+                    name:''
                 },
                 paginations:{
                     page_index:1,//当前位于的页数
@@ -205,7 +214,8 @@
             handleEdit(index,row){
                 // console.log(this.dialog)
                 //编辑
-                this.$router.push('/reviewlist')
+                // this.$router.push({name:'reviewlist',params:{key:value}})
+                this.$router.push({name:'reviewlist',params:{key:row.messagesId}})
             },
             handleDelete(index,row){
                 // console.log("ddd")
@@ -282,6 +292,20 @@
                     }
                     this.tableData = tables
                 }
+            },
+            searchByname(){
+                this.filterTableData = this.datas
+                // this.filterTableData = this.tableData
+                // console.log(this.datas)
+                const users = this.search_data.user;
+                this.allTableData = this.filterTableData.filter(item => {
+                    let name = item.users.userNikename;
+                    return name==users;
+                    // console.log(item)
+                    // console.log(time)
+                });
+                // 分页数据
+                this.setPaginations();
             }
         },
         components:{

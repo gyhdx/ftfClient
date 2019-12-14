@@ -11,7 +11,7 @@
                         </div>
 
                         <div class="text item">
-                            50
+                            {{this.data.userCount}}
                         </div>
                     </el-card>
                 </div></el-col>
@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="text item">
-                            230
+                            {{this.data.logCount}}
                         </div>
                     </el-card>
                 </div></el-col>
@@ -34,7 +34,7 @@
                             <el-button style="float: right; padding: 3px 3px" type="warning">总数</el-button>
                         </div>
                         <div class="text item">
-                            1230
+                            {{this.data.mesCount}}
                         </div>
                     </el-card>
                 </div></el-col>
@@ -55,9 +55,27 @@
 <script>
     export default {
         name: "home.vue",
-        data() {
-            return {
-                value: new Date()
+        data(){
+            return{
+                value: new Date(),
+                data:{}
+            }
+        },
+        created(){
+            this.getProfile();
+        },
+        methods:{
+            getProfile(){
+                this.$axios
+                    .get("/api/util/getData")
+                    .then(res =>{
+                        // console.log(res);
+                        this.data = res.data;
+                        console.log(this.data)
+                        // console.log('--------------------')
+                        // console.log(this.allTableData)
+                    })
+                    .catch(err => console.log(err))
             }
         }
     }

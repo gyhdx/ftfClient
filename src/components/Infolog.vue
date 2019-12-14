@@ -17,10 +17,10 @@
                         style="margin: 10px;width: 80%;"
                 >
                     <el-form-item label="姓名">
-                        <el-input type="name" v-model="formData.name"></el-input>
+                        <el-input type="name" v-model="formData.userNikename"></el-input>
                     </el-form-item>
                     <el-form-item label="性别">
-                        <el-select v-model="formData.sex" placeholder="性别">
+                        <el-select v-model="formData.userSex" placeholder="性别">
                             <el-option v-for="(formsex,index) in format_type_list" :key="index"
                                        :label="formsex" :value="formsex">
 
@@ -37,15 +37,15 @@
                     </el-form-item>
                     <el-form-item label="生日">
                         <el-date-picker
-                                v-model="formData.borthday"
+                                v-model="formData.userBirthday"
                                 type="date"
                                 placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="邮箱">
+                    <el-form-item label="不填">
                         <el-input type="email" v-model="formData.email"></el-input>
                     </el-form-item>
-                    <el-form-item label="邮箱">
+                    <el-form-item label="不填">
                         <el-input
                                 type="textarea"
                                 :rows="2"
@@ -69,7 +69,14 @@
         name:'infolog',
         props:{
             infolog:Object,
-            formData:Object
+            formData:Object,
+            user:{
+                userBirthday:'',
+                userId:'',
+                userImg:'',
+                userNikename:'',
+                userSex:'',
+            }
         },
         data(){
             return{
@@ -93,23 +100,22 @@
             }
         },
         methods:{
-            onSubmit(form){
 
+            onSubmit(form){
                 this.$refs[form].validate(valid =>{
-                    // if (valid){
-                    //     console.log(this.formData)
-                    //     // console.log(this.formData)
-                    //     this.$axios.post("/",this.formData)
-                    //         .then(res =>{
-                    //             this.$message({
-                    //                 message:'数据添加成功',
-                    //                 type:'success'
-                    //             })
-                    //             //隐藏对话框
-                    //             this.infolog.show=false
-                    //         })
-                    // }
-                    this.infolog.show=false
+                    if (valid){
+                        console.log(this.formData);
+                        this.$axios.post("/api/user/updateUser",this.formData)
+                            .then(res =>{
+                                // this.$message({
+                                //     message:'数据添加成功',
+                                //     type:'success'
+                                // })
+                                //隐藏对话框
+                                // this.infolog.show=false
+                            })
+                    }
+                    // this.infolog.show=false
                 })
             }
         }

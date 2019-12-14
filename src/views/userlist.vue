@@ -58,7 +58,7 @@
                     width="80px">
             </el-table-column>
             <el-table-column
-                    prop="role"
+                    prop="role.roleName"
                     label="角色"
                     align="center"
                     width="100px">
@@ -88,13 +88,13 @@
                     width="70px">
             </el-table-column>
 
-            <el-table-column label="操作" align="center" prop="operation" width="160px">
+            <el-table-column label="操作" align="center" prop="operation" width="200px">
                 <template slot-scope="scope">
                     <el-button
                             type="primary"
                             size="small"
                             icon="edit"
-                            @click="handleEdit(scope.$index, scope.row)">待定</el-button>
+                            @click="handleEdit(scope.$index, scope.row)">更改状态</el-button>
                     <el-button
                             size="small"
                             type="danger"
@@ -163,15 +163,13 @@
                 this.$axios
                     .get("/api/user/getAllUser")
                     .then(res =>{
-                        console.log(res);
+                        // console.log(res);
                         this.allTableData = res.data;
-                        console.log('--------------------')
-                        console.log(this.allTableData)
-                        this.setPaginations()
+                        // console.log('--------------------')
+                        // console.log(this.allTableData)
+                        this.setPaginations();
                         })
                     .catch(err => console.log(err))
-
-
             },
             setPaginations(){
                 //设置分页属性
@@ -186,38 +184,25 @@
             handleEdit(index,row){
                 // console.log(this.dialog)
                 //编辑
-                this.dialog={
-                    show:true,
-                    title:'编辑',
-                    option:"edit"
-                }
+                this.$axios
+                    .get("/api/user/updateUserState?id="+row.userId)
+                    .then(res =>{
+                        this.getProfile();
+                    })
+                    .catch(err => console.log(err));
 
-                this.formData = {
-                    money : row.money,
-                    name:row.name,
-                    sex:row.sex
-                }
+
 
             },
             handleDelete(index,row){
 
-                this.filterTableData = this.allTableData
+                this.$axios
+                    .get("/api/user/deleteUser?id="+row.userId)
+                    .then(res =>{
+                        this.getProfile();
+                    })
+                    .catch(err => console.log(err));
 
-                this.allTableData = this.filterTableData.filter(item =>{
-                    // console.log(item)
-                    return item.id != row.id
-                })
-                this.$message({
-                    message:'删除成功',
-                    type:'success'
-                })
-                this.setPaginations()
-                // this.$axios.delete('')
-                //     .then(res =>{
-                //         this.$message("删除成功")
-                //         this.getPrfile()
-                //     })
-                //     .catch()
             },
             handleAdd(){
                 // console.log("aaa")
